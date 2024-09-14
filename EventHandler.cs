@@ -17,6 +17,8 @@ namespace NukeRun
             hc = pluginInstance;
         }
 
+        private bool EventEnabled;
+
         public void Start()
         {
             Server.RoundStarted += OnRoundStart;
@@ -31,8 +33,17 @@ namespace NukeRun
 
         public void OnRoundStart()
         {
+            if (UnityEngine.Random.Range(0, 100) <= hc.Config.EventChance)
+            {
+                Log.Info("Nuke-run event active");
+                EventEnabled = true;
+            }
+            else {
+                return;
+            }
+
             RoundSummary.RoundLock = true;
-            Features.Warhead.DetonationTimer = 100;
+            Features.Warhead.DetonationTimer = hc.Config.DetonationTimer;
             Features.Warhead.Start();
             Features.Warhead.IsLocked = true;
             
@@ -53,6 +64,11 @@ namespace NukeRun
 
         public void OnWarheadDetonate()
         {
+            if (!EventEnabled)
+            {
+                return;
+            }
+
             RoundSummary.RoundLock = false;
         }
     }
