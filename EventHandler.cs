@@ -3,8 +3,6 @@ using Server = Exiled.Events.Handlers.Server;
 using PlayerRoles;
 using Features = Exiled.API.Features;
 using Warhead = Exiled.Events.Handlers.Warhead;
-using Exiled.API.Enums;
-using InventorySystem;
 
 namespace NukeRun
 {
@@ -57,8 +55,10 @@ namespace NukeRun
                 }
 
                 p.Role.Set(RoleTypeId.ClassD);
-                p.EnableEffect(EffectType.Scp207);
-                p.AddItem(ItemType.Medkit);
+                foreach(ItemType i in hc.Config.StarterItems)
+                {
+                    p.AddItem(i);
+                }
             }
         }
 
